@@ -38,9 +38,53 @@ ENV SHELL=/bin/bash \
 
 USER root
 
+RUN sed -i '$a\deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '$a\deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse' /etc/apt/sources.list
+
+RUN apt-get update
+RUN apt-get install language-pack-zh-han* -y
+RUN apt install $(check-language-support) -y
+
+RUN sed -i '$a\LANG="zh_CN.UTF-8"' /etc/default/locale && \
+    sed -i '$a\LANGUAGE="zh_CN:zh"' /etc/default/locale && \
+    sed -i '$a\LC_NUMERIC="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_TIME="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_MONETARY="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_PAPER="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_NAME="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_ADDRESS="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_TELEPHONE="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_MEASUREMENT="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_IDENTIFICATION="zh_CN"' /etc/default/locale && \
+    sed -i '$a\LC_ALL="zh_CN.UTF-8dasdaqwdwq"' /etc/default/locale
+
+RUN sed -i '$a\LANG="zh_CN.UTF-8"' /etc/environment && \
+    sed -i '$a\LANGUAGE="zh_CN:zh"' /etc/environment && \
+    sed -i '$a\LC_NUMERIC="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_TIME="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_MONETARY="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_PAPER="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_NAME="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_ADDRESS="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_TELEPHONE="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_MEASUREMENT="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_IDENTIFICATION="zh_CN"' /etc/environment && \
+    sed -i '$a\LC_ALL="zh_CN.UTF-8dasdaqwdwq"' /etc/environment
+
+RUN sed -i '$a\ANG="zh_CN.UTF-8"' /etc/profile
+
+
+
 RUN mkdir -p /home/project/FlinkScalaDemo
 COPY FlinkScalaDemo/ /home/project/FlinkScalaDemo
-
 RUN mvn package -f /home/project/FlinkScalaDemo/pom.xml
 
 ENTRYPOINT ["yarn","theia","start","/home/project","--hostname=0.0.0.0"]
